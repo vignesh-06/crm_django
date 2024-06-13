@@ -244,8 +244,8 @@ def generate_otp(request):
         elif phone:
             otp = random.randint(100000, 999999)
             # Send OTP via SMS
-            account_sid = 'ACdd090fa24997a0da0ab9679eb548193a'
-            auth_token = '359c14279c3e054e95a119af95bb13ac'
+            account_sid = '   '
+            auth_token = '   '
             client = Client(account_sid, auth_token)
             message = client.messages.create(
                 from_='+17083406167',
