@@ -23,7 +23,7 @@
   </thead>
   <tbody>
     
-{% if records %}
+<!-- {% if records %}
 	{% for record in records %}
 		<tr>
 			<td>{{ record.first_name }} {{ record.last_name }}</td>
@@ -38,7 +38,24 @@
 		</tr>
 	{% endfor %}
 
+{% endif %} -->
+
+{% if records %}
+    {% for record in records %}
+        <tr class="{% if record.highlight %}highlighted{% endif %}">
+            <td class="record-data">{{ record.first_name }} {{ record.last_name }}</td>
+            <td class="record-data">{{ record.email }}</td>
+            <td class="record-data">{{ record.phone }}</td>
+            <td class="record-data">{{ record.address }}</td>
+            <td class="record-data">{{ record.city }}</td>
+            <td class="record-data">{{ record.state }}</td>
+            <td class="record-data">{{ record.zipcode }}</td>
+            <td class="record-data">{{ record.created_at }}</td>
+            <td class="record-data"><a href="{% url 'record' record.id %}">{{ record.id }}</a></td>
+        </tr>
+    {% endfor %}
 {% endif %}
+
 
 	
 	  </tbody>
@@ -73,4 +90,48 @@
 
 {% endif %}
 
+
+<style>
+  .record-data {
+      color: rgb(3, 158, 231); /* Change to the desired text color */
+  }
+
+  .highlighted td {
+    background-color: white;
+    color: rgb(47, 0, 255); /* Change to the desired text color */
+}
+
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Style table headers */
+.table th {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  padding: 10px; /* Add padding */
+}
+
+/* Style table cells */
+.table td {
+  border: 1px solid #ddd; /* Add border */
+  padding: 8px; /* Add padding */
+}
+
+/* Add striped rows */
+.table tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9; /* Light gray background color */
+}
+
+</style>
+
+
+
 {% endblock %}
+
+
+
+
+
