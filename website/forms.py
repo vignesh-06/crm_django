@@ -32,7 +32,11 @@ class SignUpForm(UserCreationForm):
 		self.fields['password2'].label = ''
 		self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'	
 
+class CustomEmailForm(forms.Form):
+    email = forms.EmailField(validators=[validate_custom_email])
 
+class MobileNumberForm(forms.Form):
+    mobile_number = forms.CharField(validators=[validate_mobile_number], max_length=16)
 
 
 # Create Add Record Form
@@ -40,7 +44,7 @@ class AddRecordForm(forms.ModelForm):
 	first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"First Name", "class":"form-control"}), label="")
 	last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Last Name", "class":"form-control"}), label="")
 	email = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Email", "class":"form-control"}), label="")
-	phone = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Phone", "class":"form-control"}), label="")
+	phone = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Phone", "class":"form-control"}), label="", validators=[validate_mobile_number])
 	address = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Address", "class":"form-control"}), label="")
 	city = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"City", "class":"form-control"}), label="")
 	state = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"State", "class":"form-control"}), label="")
@@ -49,3 +53,16 @@ class AddRecordForm(forms.ModelForm):
 	class Meta:
 		model = Record
 		exclude = ("user",)
+
+
+def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        # Strip the country code if present
+        if phone.startswith('+91'):
+            phone = phone[3:].strip()
+        elif phone.startswith('91'):
+            phone = phone[2:].strip()
+        # Ensure it's a 10-digit number
+        if len(phone) != 10:
+            raise forms.ValidationError("Enter a valid 10-digit mobile number without the country code.")
+        return phone
